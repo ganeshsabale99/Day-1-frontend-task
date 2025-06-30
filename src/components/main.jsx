@@ -6,10 +6,12 @@ function Main() {
   const [limit, setLimit] = useState(5);
 
   useEffect(() => {
-    fetch(`https://fakestoreapi.com/products?limit=${limit}&page=${page}`)
+    fetch(
+      `https://fakestoreapi.com/products?limit=${limit}&page=${page}&q=${text}`
+    )
       .then((res) => res.json())
       .then((data) => setData(data));
-  }, [limit, page]);
+  }, [limit, page, text]);
 
   console.log("data", data);
   console.log("text", text);
@@ -23,6 +25,7 @@ function Main() {
         <input
           type="text"
           value={text}
+          placeholder="Search..."
           onChange={(e) => setText(e.target.value)}
         />
       </div>
@@ -35,7 +38,12 @@ function Main() {
         }}
       >
         {data.map((item, index) => (
-          <div style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+          <div
+            style={{
+              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+              padding: "20px",
+            }}
+          >
             <div key={index}>
               <img
                 style={{ width: "200px", height: "200px" }}
@@ -43,17 +51,26 @@ function Main() {
                 alt={item.title}
               />
               <h4>{item.title}</h4>
-              <p>{item.price}</p>
+              <p>${item.price}</p>
               <p>{item.category}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div>
+      <div
+        style={{
+          padding: "20px",
+          display: "flex",
+          gap: "20px",
+          justifyContent: "center",
+        }}
+      >
+        <p>Limit</p>
         <select
           value={limit}
           onChange={(e) => setLimit(Number(e.target.value))}
+          style={{width:"50px", padding:"5px"}}
         >
           <option value="5">5</option>
           <option value="10">10</option>
@@ -61,10 +78,15 @@ function Main() {
         </select>
       </div>
 
-      <div>
-        <button onClick={() => setPage(page + 1)}>Next</button>
-        <button onClick={() => setPage(page - 1)}> Previous</button>
-        <p>Current Page: {page}</p>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <button style={{ width: "100px" }} onClick={() => setPage(page + 1)}>
+          Next
+        </button>
+        <p style={{ padding: "0px 20px" }}>Current Page: {page}</p>
+        <button style={{ width: "100px" }} onClick={() => setPage(page - 1)}>
+          {" "}
+          Previous
+        </button>
       </div>
     </div>
   );
